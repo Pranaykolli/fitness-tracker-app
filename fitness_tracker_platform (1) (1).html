@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitTracker Pro - Your Personal Fitness Journey</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Auth Screens */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .auth-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 400px;
+            width: 100%;
+            color: white;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(50px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        .auth-card h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .auth-card p {
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: white;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #ff6b6b;
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(238, 90, 36, 0.3);
+            width: 100%;
+            margin: 0.5rem 0;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(238, 90, 36, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .auth-switch {
+            margin-top: 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .auth-switch a {
+            color: #ff6b6b;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .auth-switch a:hover {
+            text-decoration: underline;
+        }
+
+        /* Onboarding Screens */
+        .onboarding-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .onboarding-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 600px;
+            width: 100%;
+            color: white;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .progress-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .progress-step {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            margin: 0 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .progress-step.active {
+            background: #ff6b6b;
+            transform: scale(1.2);
+        }
+
+        .goal-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .goal-option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .goal-option:hover {
+            transform: translateY(-5px);
+            border-color: #ff6b6b;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+        }
+
+        .goal-option.selected {
+            border-color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.2);
+        }
+
+        .goal-option .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .activity-option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .activity-option:hover, .activity-option.selected {
+            border-color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.2);
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Main App Styles */
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: #ff6b6b;
+            transform: translateY(-2px);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            color: white;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ff6b6b;
+            display: block;
+            margin: 0.5rem 0;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.2);
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        .welcome-section {
+            text-align: center;
+            padding: 2rem 0;
+            color: white;
+        }
+
+        .welcome-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+
+        .quick-action {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .quick-action:hover {
+            background: rgba(255, 107, 107, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: linear-gradient(45deg, #00b894, #00cec9);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1000;
+            animation: slideInRight 0.3s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+
+            .goal-options {
+                grid-template-columns: 1fr;
+            }
+
+            .activity-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen active">
+        <div class="auth-container">
+            <div class="auth-card">
+                <h1>🏋️ FitTracker Pro</h1>
+                <p>Your personal fitness journey starts here</p>
+                
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="login-email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="login-password" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="btn">Sign In</button>
+                </form>
+                
+                <div class="auth-switch">
+                    Don't have an account? <a onclick="showScreen('signup-screen')">Sign up</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Screen -->
+    <div id="signup-screen" class="screen">
+        <div class="auth-container">
+            <div class="auth-card">
+                <h1>Join FitTracker Pro</h1>
+                <p>Create your account and start your fitness journey</p>
+                
+                <form onsubmit="handleSignup(event)">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="signup-name" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="signup-email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="signup-password" placeholder="Create a password" required>
+                    </div>
+                    <button type="submit" class="btn">Create Account</button>
+                </form>
+                
+                <div class="auth-switch">
+                    Already have an account? <a onclick="showScreen('login-screen')">Sign in</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Onboarding Step 1: Personal Info -->
+    <div id="onboarding-1" class="screen">
+        <div class="onboarding-container">
+            <div class="onboarding-card">
+                <div class="progress-indicator">
+                    <div class="progress-step active"></div>
+                    <div class="progress-step"></div>
+                    <div class="progress-step"></div>
+                    <div class="progress-step"></div>
+                </div>
+                
+                <h2>Tell us about yourself</h2>
+                <p>Help us personalize your fitness experience</p>
+                
+                <form onsubmit="handleOnboarding1(event)">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 2rem 0;">
+                        <div class="form-group">
+                            <label>Age</label>
+                            <input type="number" id="user-age" min="13" max="100" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <select id="user-gender" required>
+                                <option value="">Select gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 2rem 0;">
+                        <div class="form-group">
+                            <label>Height (ft)</label>
+                            <input type="number" id="user-height" step="0.1" min="3" max="8" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Weight (lbs)</label>
+                            <input type="number" id="user-weight" min="50" max="500" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Activity Level</label>
+                        <select id="user-activity-level" required>
+                            <option value="">Select activity level</option>
+                            <option value="sedentary">Sedentary (little to no exercise)</option>
+                            <option value="light">Lightly active (light exercise 1-3 days/week)</option>
+                            <option value="moderate">Moderately active (moderate exercise 3-5 days/week)</option>
+                            <option value="very">Very active (hard exercise 6-7 days/week)</option>
+                            <option value="extra">Extremely active (very hard exercise, physical job)</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn">Continue</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Onboarding Step 2: Goals -->
+    <div id="onboarding-2" class="screen">
+        <div class="onboarding-container">
+            <div class="onboarding-card">
+                <div class="progress-indicator">
+                    <div class="progress-step active"></div>
+                    <div class="progress-step active"></div>
+                    <div class="progress-step"></div>
+                    <div class="progress-step"></div>
+                </div>
+                
+                <h2>What's your main fitness goal?</h2>
+                <p>Choose your primary objective</p>
+                
+                <div class="goal-options">
+                    <div class="goal-option" onclick="selectGoal('weight-loss')">
+                        <div class="icon">🔥</div>
+                        <h3>Lose Weight</h3>
+                        <p>Burn fat and get leaner</p>
+                    </div>
+                    <div class="goal-option" onclick="selectGoal('muscle-gain')">
+                        <div class="icon">💪</div>
+                        <h3>Build Muscle</h3>
+                        <p>Gain strength and size</p>
+                    </div>
+                    <div class="goal-option" onclick="selectGoal('endurance')">
+                        <div class="icon">🏃</div>
+                        <h3>Improve Endurance</h3>
+                        <p>Boost cardiovascular fitness</p>
+                    </div>
+                    <div class="goal-option" onclick="selectGoal('general-fitness')">
+                        <div class="icon">⚡</div>
+                        <h3>General Fitness</h3>
+                        <p>Stay healthy and active</p>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="handleOnboarding2()" disabled id="goal-continue-btn">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Onboarding Step 3: Preferred Activities -->
+    <div id="onboarding-3" class="screen">
+        <div class="onboarding-container">
+            <div class="onboarding-card">
+                <div class="progress-indicator">
+                    <div class="progress-step active"></div>
+                    <div class="progress-step active"></div>
+                    <div class="progress-step active"></div>
+                    <div class="progress-step"></div>
+                </div>
+                
+                <h2>What activities do you enjoy?</h2>
+                <p>Select all that interest you (we'll customize your experience)</p>
+                
+                <div class="activity-grid">
+                    <div class="activity-option" onclick="toggleActivity('running')">
+                        <div style="font-size: 2rem;">🏃</div>
+                        <p>Running</p>
+                    </div>
+                    <div class="activity-option" onclick="toggleActivity('weightlifting')">
+                        <div style="font-size: 2rem;">🏋️</div>
+                        <p>Weightlifting</p>
+                    </div>
+                    <div class="activity-option" onclick="toggleActivity('yoga')">
+                        <div style="font-size: 2rem;">🧘</div>
+                        <p>Yoga</p>
+                    </div>
+                    <div class="activity-option" onclick="toggleActivity('swimming')">
+                        <div style="font-size: 2rem;">🏊</div>
+                        <p>Swimming</p>
+                    </div>
+                    <div class="activity-option" onclick="toggleActivity('cycling')">
+                        <div style="font-size: 2rem;">🚴</div>
+                        <p>Cycling</p>
+                    </div>
+                    <div class="activity-option" onclick="toggleActivity('boxing')">
+                        <div style="font-size: 2rem;">🥊</div>
+                        <p>Boxing</p>
+                    </div>
+                    <div class="activity-option" onclick="toggleActivity('dancing')">
+                        <div style="font-size: 2rem;">💃</div>
+                        <p>Dancing</p>
+                    </div>
+                    <div class="activity-option" onclick="toggleActivity('hiking')">
+                        <div style="font-size: 2rem;">🥾</div>
+                        <p>Hiking</p>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="handleOnboarding3()">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Onboarding Step 4: Schedule -->
+    <div id="onboarding-4" class="screen">
+        <div class="onboarding-container">
+            <div class="onboarding-card">
+                <div class="progress-indicator">
+                    <div class="progress-step active"></div>
+                    <div class="progress-step active"></div>
+                    <div class="progress-step active"></div>
+                    <div class="progress-step active"></div>
+                </div>
+                
+                <h2>When do you prefer to work out?</h2>
+                <p>Help us send reminders at the right time</p>
+                
+                <div class="form-group">
+                    <label>How many days per week?</label>
+                    <select id="workout-frequency" required>
+                        <option value="">Select frequency</option>
+                        <option value="2">2 days per week</option>
+                        <option value="3">3 days per week</option>
+                        <option value="4">4 days per week</option>
+                        <option value="5">5 days per week</option>
+                        <option value="6">6 days per week</option>
+                        <option value="7">7 days per week</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Preferred workout time</label>
+                    <select id="workout-time" required>
+                        <option value="">Select time</option>
+                        <option value="morning">Morning (6-10 AM)</option>
+                        <option value="afternoon">Afternoon (12-4 PM)</option>
+                        <option value="evening">Evening (5-8 PM)</option>
+                        <option value="night">Night (8 PM+)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Workout duration preference</label>
+                    <select id="workout-duration" required>
+                        <option value="">Select duration</option>
+                        <option value="15-30">15-30 minutes</option>
+                        <option value="30-45">30-45 minutes</option>
+                        <option value="45-60">45-60 minutes</option>
+                        <option value="60+">60+ minutes</option>
+                    </select>
+                </div>
+                
+                <button class="btn" onclick="completeOnboarding()">Start My Journey!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="main-app" class="screen">
+        <header class="header">
+            <nav class="nav">
+                <div class="logo">
+                    🏋️ FitTracker Pro
+                </div>
+                <ul class="nav-links">
+                    <li><a onclick="showPage('dashboard')">Dashboard</a></li>
+                    <li><a onclick="showPage('workouts')">Workouts</a></li>
+                    <li><a onclick="showPage('nutrition')">Nutrition</a></li>
+                    <li><a onclick="showPage('progress')">Progress</a></li>
+                </ul>
+                <div class="user-info">
+                    <span id="user-name">John Doe</span>
+                    <div class="user-avatar" id="user-avatar">JD</div>
+                    <button class="btn-secondary" onclick="logout()" style="padding: 0.5rem 1rem; margin-left: 1rem;">Logout</button>
+                </div>
+            </nav>
+        </header>
+
+        <div class="container">
+            <!-- Dashboard Page -->
+            <div id="dashboard" class="page active">
+                <div class="welcome-section">
+                    <h1 id="dashboard-welcome">Welcome back, Champion! 💪</h1>
+                    <p id="dashboard-subtitle">Ready to achieve your fitness goals today?</p>
+                    
+                    <div class="quick-actions">
+                        <button class="quick-action" onclick="quickLogWorkout()">🏋️ Quick Workout</button>
+                        <button class="quick-action" onclick="logWater()">💧 Add Water</button>
+                        <button class="quick-action" onclick="showPage('nutrition')">🍎 Log Meal</button>
+                        <button class="quick-action" onclick="showPage('progress')">📊 View Progress</button>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <h3>🔥 Today's Calories</h3>
+                        <span class="stat-number" id="calories-burned">0</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="calories-progress" style="width: 0%"></div>
+                        </div>
+                        <small id="calories-goal">Goal: Based on your preferences</small>
+                    </div>
+
+                    <div class="card">
+                        <h3>🚶 Steps Taken</h3>
+                        <span class="stat-number" id="steps-count">0</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="steps-progress" style="width: 0%"></div>
+                        </div>
+                        <small>Goal: 10,000 steps</small>
+                    </div>
+
+                    <div class="card">
+                        <h3>⏱️ Active Minutes</h3>
+                        <span class="stat-number" id="active-minutes">0</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="minutes-progress" style="width: 0%"></div>
+                        </div>
+                        <small id="minutes-goal">Goal: Based on your plan</small>
+                    </div>
+
+                    <div class="card">
+                        <h3>💧 Water Intake</h3>
+                        <span class="stat-number" id="water-count">0</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="water-progress" style="width: 0%"></div>
+                        </div>
+                        <small>Goal: 8 glasses</small>
+                        <button class="btn btn-secondary" onclick="logWater()" style="margin-top: 1rem; width: 100%;">Add Glass</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🎯 Your Personal Goals</h3>
+                    <div id="personal-goals"></div>
+                </div>
+                <script>
+    // Global variables
+    let currentUser = null;
+    let users = JSON.parse(localStorage.getItem('fitTrackerUsers')) || [];
+    let selectedGoal = null;
+    let selectedActivities = [];
+    let onboardingData = {};
+    
+    // DOM elements
+    const notification = document.getElementById('notification');
+    
+    // Initialize the app
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if there's a logged-in user
+        const loggedInUserId = localStorage.getItem('fitTrackerLoggedInUserId');
+        if (loggedInUserId) {
+            const user = users.find(u => u.id === loggedInUserId);
+            if (user) {
+                // Check if user has completed onboarding
+                if (user.onboardingComplete) {
+                    currentUser = user;
+                    showMainApp();
+                } else {
+                    // User needs to complete onboarding
+                    currentUser = user;
+                    showScreen('onboarding-1');
+                }
+            }
+        }
+    });
+    
+    // Screen navigation functions
+    function showScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(screen => {
+            screen.classList.remove('active');
+        });
+        document.getElementById(screenId).classList.add('active');
+    }
+    
+    function showPage(pageId) {
+        document.querySelectorAll('.page').forEach(page => {
+            page.classList.remove('active');
+        });
+        document.getElementById(pageId).classList.add('active');
+    }
+    
+    // Auth functions
+    function handleLogin(e) {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        
+        const user = users.find(u => u.email === email && u.password === password);
+        
+        if (user) {
+            currentUser = user;
+            localStorage.setItem('fitTrackerLoggedInUserId', user.id);
+            
+            if (user.onboardingComplete) {
+                showMainApp();
+            } else {
+                showScreen('onboarding-1');
+            }
+            
+            showNotification('Login successful! Welcome back.');
+        } else {
+            showNotification('Invalid email or password', 'error');
+        }
+    }
+    
+    function handleSignup(e) {
+        e.preventDefault();
+        const name = document.getElementById('signup-name').value;
+        const email = document.getElementById('signup-email').value;
+        const password = document.getElementById('signup-password').value;
+        
+        // Check if user already exists
+        const userExists = users.some(u => u.email === email);
+        
+        if (userExists) {
+            showNotification('An account with this email already exists', 'error');
+            return;
+        }
+        
+        // Create new user
+        const newUser = {
+            id: Date.now().toString(),
+            name,
+            email,
+            password,
+            onboardingComplete: false,
+            stats: {
+                workouts: [],
+                nutrition: [],
+                waterIntake: 0,
+                steps: 0,
+                activeMinutes: 0,
+                goals: []
+            }
+        };
+        
+        users.push(newUser);
+        localStorage.setItem('fitTrackerUsers', JSON.stringify(users));
+        
+        currentUser = newUser;
+        localStorage.setItem('fitTrackerLoggedInUserId', newUser.id);
+        
+        showScreen('onboarding-1');
+        showNotification('Account created successfully!');
+    }
+    
+    function logout() {
+        currentUser = null;
+        localStorage.removeItem('fitTrackerLoggedInUserId');
+        showScreen('login-screen');
+    }
+    
+    // Onboarding functions
+    function handleOnboarding1(e) {
+        e.preventDefault();
+        
+        onboardingData = {
+            age: document.getElementById('user-age').value,
+            gender: document.getElementById('user-gender').value,
+            height: document.getElementById('user-height').value,
+            weight: document.getElementById('user-weight').value,
+            activityLevel: document.getElementById('user-activity-level').value
+        };
+        
+        showScreen('onboarding-2');
+    }
+    
+    function selectGoal(goal) {
+        selectedGoal = goal;
+        document.querySelectorAll('.goal-option').forEach(option => {
+            option.classList.remove('selected');
+        });
+        event.currentTarget.classList.add('selected');
+        document.getElementById('goal-continue-btn').disabled = false;
+    }
+    
+    function handleOnboarding2() {
+        if (!selectedGoal) {
+            showNotification('Please select a goal', 'error');
+            return;
+        }
+        
+        onboardingData.goal = selectedGoal;
+        showScreen('onboarding-3');
+    }
+    
+    function toggleActivity(activity) {
+        const index = selectedActivities.indexOf(activity);
+        if (index === -1) {
+            selectedActivities.push(activity);
+        } else {
+            selectedActivities.splice(index, 1);
+        }
+        
+        event.currentTarget.classList.toggle('selected');
+    }
+    
+    function handleOnboarding3() {
+        if (selectedActivities.length === 0) {
+            showNotification('Please select at least one activity', 'error');
+            return;
+        }
+        
+        onboardingData.activities = selectedActivities;
+        showScreen('onboarding-4');
+    }
+    
+    function completeOnboarding() {
+        const frequency = document.getElementById('workout-frequency').value;
+        const time = document.getElementById('workout-time').value;
+        const duration = document.getElementById('workout-duration').value;
+        
+        if (!frequency || !time || !duration) {
+            showNotification('Please fill all fields', 'error');
+            return;
+        }
+        
+        // Update user with onboarding data
+        currentUser = {
+            ...currentUser,
+            ...onboardingData,
+            preferences: {
+                workoutFrequency: frequency,
+                workoutTime: time,
+                workoutDuration: duration
+            },
+            onboardingComplete: true
+        };
+        
+        // Update users array
+        const userIndex = users.findIndex(u => u.id === currentUser.id);
+        users[userIndex] = currentUser;
+        localStorage.setItem('fitTrackerUsers', JSON.stringify(users));
+        
+        showMainApp();
+        showNotification('Onboarding complete! Your fitness journey begins now.');
+    }
+    
+    // Main app functions
+    function showMainApp() {
+        showScreen('main-app');
+        updateDashboard();
+        document.getElementById('user-name').textContent = currentUser.name;
+        document.getElementById('user-avatar').textContent = currentUser.name.split(' ').map(n => n[0]).join('');
+        
+        // Set welcome message based on time of day
+        const hour = new Date().getHours();
+        let greeting = 'Hello';
+        if (hour < 12) greeting = 'Good morning';
+        else if (hour < 18) greeting = 'Good afternoon';
+        else greeting = 'Good evening';
+        
+        document.getElementById('dashboard-welcome').textContent = `${greeting}, ${currentUser.name.split(' ')[0]}!`;
+    }
+    
+    function updateDashboard() {
+        // Update stats
+        document.getElementById('calories-burned').textContent = 
+            currentUser.stats.workouts.reduce((sum, w) => sum + (w.calories || 0), 0);
+        
+        document.getElementById('steps-count').textContent = currentUser.stats.steps;
+        document.getElementById('active-minutes').textContent = currentUser.stats.activeMinutes;
+        document.getElementById('water-count').textContent = currentUser.stats.waterIntake;
+        
+        // Update progress bars
+        document.getElementById('steps-progress').style.width = 
+            `${Math.min((currentUser.stats.steps / 10000) * 100, 100)}%`;
+        
+        document.getElementById('water-progress').style.width = 
+            `${Math.min((currentUser.stats.waterIntake / 8) * 100, 100)}%`;
+        
+        // Update goals
+        updateGoalsDisplay();
+    }
+    
+    function updateGoalsDisplay() {
+        const goalsContainer = document.getElementById('personal-goals');
+        
+        if (currentUser.stats.goals.length === 0) {
+            goalsContainer.innerHTML = `
+                <p style="text-align: center; color: #666; padding: 20px;">
+                    You haven't set any goals yet. <a onclick="showPage('progress')" style="color: #ff6b6b; cursor: pointer;">Create your first goal</a> to stay motivated!
+                </p>
+            `;
+            return;
+        }
+        
+        goalsContainer.innerHTML = currentUser.stats.goals.map(goal => `
+            <div style="margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <strong>${goal.title}</strong>
+                    <span>${goal.currentValue} / ${goal.targetValue}</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${Math.min((goal.currentValue / goal.targetValue) * 100, 100)}%"></div>
+                </div>
+                <small>${goal.description}</small>
+            </div>
+        `).join('');
+    }
+    
+    // Quick actions
+    function quickLogWorkout() {
+        showPage('workouts');
+        showNotification('Ready to log your workout!');
+    }
+    
+    function logWater() {
+        currentUser.stats.waterIntake += 1;
+        
+        // Update users array
+        const userIndex = users.findIndex(u => u.id === currentUser.id);
+        users[userIndex] = currentUser;
+        localStorage.setItem('fitTrackerUsers', JSON.stringify(users));
+        
+        updateDashboard();
+        showNotification('Water intake logged! 💧');
+    }
+    
+    // Notification system
+    function showNotification(message, type = 'success') {
+        notification.textContent = message;
+        notification.style.display = 'block';
+        notification.style.background = type === 'error' ? 
+            'linear-gradient(45deg, #ff6b6b, #ee5a24)' : 
+            'linear-gradient(45deg, #00b894, #00cec9)';
+        
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 3000);
+    }
+</script>
+</body>
+</html>
